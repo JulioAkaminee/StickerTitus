@@ -3,15 +3,19 @@ import ImageViewer from "@/components/ImageViewer";
 import Button from "@/components/Button";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import { Stack } from "expo-router";
+
+
+const PlaceholderImage = require("@/assets/images/Young_Thug.webp")
  
-const PlacehoderImage = require("@/assets/images/Young_Thug.webp");
+
  
 export default function Index() {
 
 
 
   const [selectImage, setSelectedImage] = useState<string | undefined>(undefined);
+  const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
+
   //Requisição Assíncronas
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -19,22 +23,41 @@ export default function Index() {
       allowsEditing: true,
       quality: 1,
     });
- 
-    if (!result.canceled){
-      setSelectedImage(result.assets[0].uri);
-    } else {
+   
+    if (result.canceled){
       alert("Você não selecionou nenhuma imagem");
+    } else {
+      setSelectedImage(result.assets[0].uri);
+      setShowAppOptions(true);
+     
     }
   };
   return (
     <View style={styles.container}>
+
       <View style={styles.imageContainer}>
-        <ImageViewer imgSource={PlacehoderImage} selectedImage={selectImage} />
+        <ImageViewer imgSource={PlaceholderImage} selectedImage={selectImage} />
       </View>
-      <View style={styles.footerContainer}>
-        <Button label="Choose a photo" theme="primary" onPress={pickImageAsync} />
-        <Button label="Use this photo" />
-      </View>
+
+    
+      {showAppOptions ? (
+        <View /> // Quando showAppOptions é verdadeiro, renderiza uma View vazia
+      ) : (
+        <View style={styles.footerContainer}>
+          <Button
+            label="Choose a photo"
+            theme="primary"
+            onPress={pickImageAsync} // Ao pressionar, executa a função pickImageAsync
+          />
+          <Button
+            label="Use this photo"
+            onPress={() => setShowAppOptions(true)} // Ao pressionar, muda o estado showAppOptions para true
+          />
+        </View>
+      )}
+      
+
+      
     </View>
   );
 }
@@ -50,9 +73,13 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 25,
     paddingTop: 8,
+    display:"flex",
+    alignItems: "center",
+    justifyContent:"center",
+   
   },
   footerContainer: {
-    flex: 1 / 3,// é um terço da pagina
+    marginBottom: 25,// é um terço da pagina
     alignItems: "center",
   },
 });
