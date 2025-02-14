@@ -3,6 +3,7 @@ import ImageViewer from "@/components/ImageViewer";
 import Button from "@/components/Button";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
+import CircleButton from "@/components/CircleButton";
 
 
 const PlaceholderImage = require("@/assets/images/Young_Thug.webp")
@@ -29,8 +30,8 @@ export default function Index() {
     } else {
       setSelectedImage(result.assets[0].uri);
       setShowAppOptions(true);
-     
     }
+
   };
   return (
     <View style={styles.container}>
@@ -55,6 +56,7 @@ export default function Index() {
           />
         </View>
       )}
+
       
 
       
