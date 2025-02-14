@@ -7,6 +7,7 @@ export default function RootLayout() {
     <Tabs screenOptions={{tabBarActiveTintColor: "#89CFF0"}}>
       <Tabs.Screen name="index" options={{
          title: "Home", 
+         headerShown:false,
          tabBarIcon:({color, focused})=>(
         <Ionicons
          name={focused ? "home-sharp" : "home-outline"}
