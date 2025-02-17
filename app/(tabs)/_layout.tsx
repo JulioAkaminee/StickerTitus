@@ -8,11 +8,11 @@ export default function RootLayout() {
       screenOptions={{
         tabBarActiveTintColor: "black",
         tabBarStyle: {
-          borderRadius: 30,
+          borderRadius: 20,
           backgroundColor: "white",
           height: 70,
           position: "absolute", 
-          bottom: 10, 
+          bottom: 20, 
           left: 20, 
           right: 20, 
           padding: 10,
@@ -38,6 +38,7 @@ export default function RootLayout() {
         name="about"
         options={{
           title: "About",
+          headerShown:false,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? "information-circle" : "information-circle-outline"}

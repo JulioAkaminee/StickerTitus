@@ -1,13 +1,13 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import ImageViewer from "@/components/ImageViewer";
 import Button from "@/components/Button";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import CircleButton from "@/components/CircleButton";
 import IconButton from "@/components/IconButton";
+import EmojiPicker from "@/components/EmojiPicker";
 
-
-const PlaceholderImage = require("@/assets/images/Young_Thug.webp")
+const PlaceholderImage = require("@/assets/images/Young_Thug.webp");
  
 
  
@@ -17,6 +17,7 @@ export default function Index() {
 
   const [selectImage, setSelectedImage] = useState<string | undefined>(undefined);
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
+  const [emojiPicker,setEmojiPicker] = useState<boolean>(false);
 
   //Requisição Assíncronas
   const pickImageAsync = async () => {
@@ -37,7 +38,8 @@ export default function Index() {
   
       const onReset = () => {setShowAppOptions(false)};
 
-      const onAddSticker = () => {};
+      const onAddSticker = () => {setEmojiPicker(true)};
+      const onCloseSticker = () => {setEmojiPicker(false)};
       
       const onSaveImageAsync = async () => {}
   return (
@@ -55,7 +57,7 @@ export default function Index() {
         <View>
           <View style={styles.containerAppOptions}>
             <IconButton icon="refresh" label="Reset" onPress={onReset}/>
-            <CircleButton onPress={()=>{onAddSticker}} />     
+            <CircleButton onPress={onAddSticker} />     
             <IconButton icon="save-alt" label="Save" onPress={()=>{onSaveImageAsync}}/>       
           </View>
         </View> 
@@ -74,8 +76,11 @@ export default function Index() {
       )}
 
       
+      <TouchableWithoutFeedback onPress={onCloseSticker}>
 
-      
+      <EmojiPicker isVisible={emojiPicker} onClose={onCloseSticker}  />
+      </TouchableWithoutFeedback>
+
     </View>
   );
 }
@@ -103,6 +108,6 @@ const styles = StyleSheet.create({
   containerAppOptions:{
     display:"flex",
     flexDirection:"row",
-    marginVertical:20
+    marginBottom:110
   }
 });
