@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import CircleButton from "@/components/CircleButton";
+import IconButton from "@/components/IconButton";
 
 
 const PlaceholderImage = require("@/assets/images/Young_Thug.webp")
@@ -31,8 +32,14 @@ export default function Index() {
       setSelectedImage(result.assets[0].uri);
       setShowAppOptions(true);
     }
-
+    
   };
+  
+      const onReset = () => {setShowAppOptions(false)};
+
+      const onAddSticker = () => {};
+      
+      const onSaveImageAsync = async () => {}
   return (
     <View style={styles.container}>
 
@@ -40,9 +47,18 @@ export default function Index() {
         <ImageViewer imgSource={PlaceholderImage} selectedImage={selectImage} />
       </View>
 
+    {/* ? Significa verdadeiro e : Falso */}
+
+
     
       {showAppOptions ? (
-        <View /> // Quando showAppOptions é verdadeiro, renderiza uma View vazia
+        <View>
+          <View style={styles.containerAppOptions}>
+            <IconButton icon="refresh" label="Reset" onPress={onReset}/>
+            <CircleButton onPress={()=>{onAddSticker}} />     
+            <IconButton icon="save-alt" label="Save" onPress={()=>{onSaveImageAsync}}/>       
+          </View>
+        </View> 
       ) : (
         <View style={styles.footerContainer}>
           <Button
@@ -81,7 +97,12 @@ const styles = StyleSheet.create({
    
   },
   footerContainer: {
-    marginBottom: 25,// é um terço da pagina
+    marginBottom: 95,// é um terço da pagina
     alignItems: "center",
   },
+  containerAppOptions:{
+    display:"flex",
+    flexDirection:"row",
+    marginVertical:20
+  }
 });
