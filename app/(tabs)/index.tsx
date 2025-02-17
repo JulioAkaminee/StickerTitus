@@ -1,4 +1,5 @@
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { type ImageSource } from "expo-image";
 import ImageViewer from "@/components/ImageViewer";
 import Button from "@/components/Button";
 import * as ImagePicker from "expo-image-picker";
@@ -6,18 +7,19 @@ import { useState } from "react";
 import CircleButton from "@/components/CircleButton";
 import IconButton from "@/components/IconButton";
 import EmojiPicker from "@/components/EmojiPicker";
+import EmojiList from "@/components/EmojiList";
+
 
 const PlaceholderImage = require("@/assets/images/Young_Thug.webp");
  
 
  
 export default function Index() {
-
-
-
+ //Controles de estados
   const [selectImage, setSelectedImage] = useState<string | undefined>(undefined);
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
   const [emojiPicker,setEmojiPicker] = useState<boolean>(false);
+  const [pickedImage,setPickedEmoji] = useState<ImageSource | undefined>(undefined);
 
   //Requisição Assíncronas
   const pickImageAsync = async () => {
@@ -34,14 +36,13 @@ export default function Index() {
       setShowAppOptions(true);
     }
     
-  };
+    };
   
       const onReset = () => {setShowAppOptions(false)};
-
       const onAddSticker = () => {setEmojiPicker(true)};
-      const onCloseSticker = () => {setEmojiPicker(false)};
-      
+      const onCloseSticker = () => {setEmojiPicker(false)}
       const onSaveImageAsync = async () => {}
+
   return (
     <View style={styles.container}>
 
@@ -70,7 +71,7 @@ export default function Index() {
           />
           <Button
             label="Use this photo"
-            onPress={() => setShowAppOptions(true)} // Ao pressionar, muda o estado showAppOptions para true
+            onPress={() => setShowAppOptions(true)} 
           />
         </View>
       )}
@@ -78,7 +79,10 @@ export default function Index() {
       
       <TouchableWithoutFeedback onPress={onCloseSticker}>
 
-      <EmojiPicker isVisible={emojiPicker} onClose={onCloseSticker}  />
+      <EmojiPicker isVisible={emojiPicker} onClose={onCloseSticker}  >
+      <EmojiList onCloseModal={onCloseSticker} onSelect={setPickedEmoji}/>
+      </EmojiPicker>
+
       </TouchableWithoutFeedback>
 
     </View>
