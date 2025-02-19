@@ -1,11 +1,13 @@
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { useState,useRef } from "react";
+import {captureRef} from "react-native-view-shot"
 import { type ImageSource } from "expo-image";
 import ImageViewer from "@/components/ImageViewer";
 import Button from "@/components/Button";
-
 import * as ImagePicker from "expo-image-picker";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-import { useState } from "react";
+import * as MediaLibrary from "expo-media-library";
+
 import CircleButton from "@/components/CircleButton";
 import IconButton from "@/components/IconButton";
 import EmojiPicker from "@/components/EmojiPicker";
@@ -24,6 +26,12 @@ export default function Index() {
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
   const [emojiPicker,setEmojiPicker] = useState<boolean>(false);
   const [pickedEmoji,setPickedEmoji] = useState<ImageSource | undefined>(undefined);
+  const [status,requestPermission]= MediaLibrary.usePermissions();
+  const imageRef = useRef<View>(null);
+
+  if(status === null){
+    requestPermission();
+  }
 
   //Requisição Assíncronas
   const pickImageAsync = async () => {
@@ -45,14 +53,33 @@ export default function Index() {
       const onReset = () => {setShowAppOptions(false)};
       const onAddSticker = () => {setEmojiPicker(true)};
       const onCloseSticker = () => {setEmojiPicker(false)}
-      const onSaveImageAsync = async () => {}
+      const onSaveImageAsync = async () => {
+        try{
+          const localUri = await captureRef(imageRef,{
+            height:440,
+            quality: 1
+          })
+          await MediaLibrary.saveToLibraryAsync(localUri);
+          if(localUri){
+            alert("Saved!");
+          }else{
+            alert("Not Saved")
+          }
+        }catch (error){
+          console.log(error);
+        }
+      }
 
   return (
     <GestureHandlerRootView style={styles.container}>
 
       <View style={styles.imageContainer}>
+        <View ref={imageRef} collapsable={false}>
+
+       
         <ImageViewer imgSource={PlaceholderImage} selectedImage={selectImage} />
-       {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji}/>}
+       {pickedEmoji && (<EmojiSticker imageSize={40} stickerSource={pickedEmoji}/>)}
+       </View>
       </View>
 
     {/* ? Significa verdadeiro e : Falso */}
@@ -64,7 +91,7 @@ export default function Index() {
           <View style={styles.containerAppOptions}>
             <IconButton icon="refresh" label="Reset" onPress={onReset}/>
             <CircleButton onPress={onAddSticker} />     
-            <IconButton icon="save-alt" label="Save" onPress={()=>{onSaveImageAsync}}/>       
+            <IconButton icon="save-alt" label="Save" onPress={onSaveImageAsync}/>       
           </View>
         </View> 
       ) : (
