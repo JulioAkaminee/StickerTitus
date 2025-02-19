@@ -1,43 +1,76 @@
 import { type ImageSource } from "expo-image";
-import { View, StyleSheet } from "react-native";
-import  Animated, {useAnimatedStyle, useSharedValue,withSpring}  from "react-native-reanimated";
-import { Gesture,GestureDetector } from "react-native-gesture-handler";
+import { StyleSheet } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 type Props = {
-    imageSize: number;
-    stickerSource: ImageSource;
+  imageSize: number;
+  stickerSource: ImageSource;
 };
 
 export default function EmojiSticker({ imageSize, stickerSource }: Props) {
-    const scaleImage = useSharedValue(imageSize);
-    const doubleTap = Gesture.Tap().numberOfTaps(2).onStart(()=>{
-        if(scaleImage.value !==imageSize *2){
-            scaleImage.value = scaleImage.value *2
-        }else{
-            scaleImage.value = Math.round(scaleImage.value / 2);
-        }
+  const scaleImage = useSharedValue(imageSize);
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+
+  const doubleTap = Gesture.Tap()
+    .numberOfTaps(2)
+    .onStart(() => {
+      if (scaleImage.value !== imageSize * 2) {
+        scaleImage.value = scaleImage.value * 2;
+      } else {
+        scaleImage.value = Math.round(scaleImage.value / 2);
+      }
     });
 
-    const imageStyle = useAnimatedStyle(()=> {
-        return{
-            width:withSpring(scaleImage.value),
-            height: withSpring(scaleImage.value)
-        }
-    })
-    return (
-        <View style={styles.container}>
-            <GestureDetector gesture={doubleTap}>
+  const imageStyle = useAnimatedStyle(() => {
+    return {
+      width: withSpring(scaleImage.value),
+      height: withSpring(scaleImage.value),
+    };
+  });
 
-            <Animated.Image source={stickerSource} style={[{ width: imageSize, height: imageSize },imageStyle]} resizeMode="contain" />
-            </GestureDetector>
-        </View>
-    )
+  const drag = Gesture.Pan().onChange((event) => {
+    translateX.value += event.changeX;
+    translateY.value += event.changeY;
+  });
+
+  const containerStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: translateX.value,
+        },
+        {
+          translateY: translateY.value,
+        },
+      ],
+    };
+  });
+
+  return (
+    <GestureDetector gesture={drag}>
+
+
+    <Animated.View style={[styles.container, containerStyle]}>
+      <GestureDetector gesture={doubleTap}>
+        <Animated.Image
+          source={stickerSource}
+          style={[{ width: imageSize, height: imageSize }, imageStyle]}
+          resizeMode="contain"
+        />
+      </GestureDetector>
+    </Animated.View>
+    </GestureDetector>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        top: -350
-    }
-})
-
-
+  container: {
+    top: -350,
+  },
+});
