@@ -8,6 +8,7 @@ import CircleButton from "@/components/CircleButton";
 import IconButton from "@/components/IconButton";
 import EmojiPicker from "@/components/EmojiPicker";
 import EmojiList from "@/components/EmojiList";
+import EmojiSticker from "@/components/EmojiSticker";
 
 
 const PlaceholderImage = require("@/assets/images/Young_Thug.webp");
@@ -19,7 +20,7 @@ export default function Index() {
   const [selectImage, setSelectedImage] = useState<string | undefined>(undefined);
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
   const [emojiPicker,setEmojiPicker] = useState<boolean>(false);
-  const [pickedImage,setPickedEmoji] = useState<ImageSource | undefined>(undefined);
+  const [pickedEmoji,setPickedEmoji] = useState<ImageSource | undefined>(undefined);
 
   //Requisição Assíncronas
   const pickImageAsync = async () => {
@@ -48,6 +49,7 @@ export default function Index() {
 
       <View style={styles.imageContainer}>
         <ImageViewer imgSource={PlaceholderImage} selectedImage={selectImage} />
+       {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji}/>}
       </View>
 
     {/* ? Significa verdadeiro e : Falso */}
