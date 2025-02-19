@@ -3,7 +3,6 @@ import { PropsWithChildren } from "react";
 import { Modal, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 
-
 type Props = PropsWithChildren<{
     isVisible: boolean;
     onClose: () => void;

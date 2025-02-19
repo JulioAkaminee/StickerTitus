@@ -2,13 +2,16 @@ import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { type ImageSource } from "expo-image";
 import ImageViewer from "@/components/ImageViewer";
 import Button from "@/components/Button";
+
 import * as ImagePicker from "expo-image-picker";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
 import { useState } from "react";
 import CircleButton from "@/components/CircleButton";
 import IconButton from "@/components/IconButton";
 import EmojiPicker from "@/components/EmojiPicker";
 import EmojiList from "@/components/EmojiList";
 import EmojiSticker from "@/components/EmojiSticker";
+
 
 
 const PlaceholderImage = require("@/assets/images/Young_Thug.webp");
@@ -45,7 +48,7 @@ export default function Index() {
       const onSaveImageAsync = async () => {}
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
 
       <View style={styles.imageContainer}>
         <ImageViewer imgSource={PlaceholderImage} selectedImage={selectImage} />
@@ -87,7 +90,7 @@ export default function Index() {
 
       </TouchableWithoutFeedback>
 
-    </View>
+    </GestureHandlerRootView>
   );
 }
  
